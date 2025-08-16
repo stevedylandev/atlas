@@ -1,0 +1,25 @@
+{
+	"name": "ens-atlas",
+	"module": "index.ts",
+	"type": "module",
+	"bin": {
+		"atlas": "./dist/index.js"
+	},
+	"scripts": {
+		"build": "bun build src/index.ts --outdir dist --target node",
+		"dev": "bun run build && bun link"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@ensdomains/content-hash": "^3.0.0",
+		"@ensdomains/ensjs": "^4.0.2",
+		"cmd-ts": "^0.13.0",
+		"tevm": "^1.0.0-next.147",
+		"viem": "^2.33.3"
+	}
+}
