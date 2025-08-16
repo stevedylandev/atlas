@@ -19,7 +19,8 @@
 		"@ensdomains/content-hash": "^3.0.0",
 		"@ensdomains/ensjs": "^4.0.2",
 		"cmd-ts": "^0.13.0",
-		"tevm": "^1.0.0-next.147",
-		"viem": "^2.33.3"
+		"viem": "^2.33.3",
+		"yocto-spinner": "^1.0.0",
+		"yoctocolors": "^2.1.1"
 	}
 }

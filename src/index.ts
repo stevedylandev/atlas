@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --no-deprecation
 import {
 	binary,
 	command,
@@ -10,7 +10,7 @@ import {
 	string,
 	subcommands,
 } from "cmd-ts";
-import { resolve as resolveCmd } from "./commands";
+import { profile as profileCmd, resolve as resolveCmd } from "./commands";
 
 const resolve = command({
 	name: "resolve",
@@ -48,11 +48,32 @@ const resolve = command({
 	},
 });
 
+const profile = command({
+	name: "resolve",
+	description: "Resolve an ENS name to an address or vice versa",
+	args: {
+		input: positional({
+			type: string,
+			description: "Provide either an address or an ENS name to resolve it",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.input) {
+			console.log(
+				"Please provide an address or ENS Name `atlas resolve <ADDRESS | vitalik.eth>`",
+			);
+			return;
+		}
+		await profileCmd(args);
+	},
+});
+
 const cli = subcommands({
 	name: "atlas",
 	description: "Explore ENS with Atlas",
 	version: "0.0.1",
 	cmds: {
+		profile,
 		resolve,
 	},
 });
