@@ -4,5 +4,5 @@ import { mainnet } from "viem/chains";
 
 export const ensClient = createPublicClient({
 	chain: addEnsContracts(mainnet),
-	transport: http("https://eth.llamarpc.com"),
+	transport: http(process.env.ETH_RPC_URL || "https://eth.drpc.org"),
 });
