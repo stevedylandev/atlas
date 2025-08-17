@@ -39,10 +39,21 @@ function printProfile(
 
 	if (records.coins && records.coins.length > 0) {
 		console.log(`\n${colors.blue("Coin Records:")}`);
+
+		const maxCoinNameLength = Math.max(
+			...records.coins
+				.filter((coin: any) => coin.value)
+				.map((coin: any) => coin.name.toUpperCase().length),
+		);
+
 		for (const coin of records.coins) {
 			if (coin.value) {
+				const coinName = coin.name.toUpperCase();
+				const padding = " ".repeat(
+					Math.max(1, maxCoinNameLength + 1 - coinName.length),
+				);
 				console.log(
-					`${colors.blue(`${coin.name.toUpperCase()}:`)}         ${coin.value}`,
+					`${colors.blue(`${coinName}:`)}${padding}      ${coin.value}`,
 				);
 			}
 		}
@@ -120,7 +131,18 @@ export async function profile(options: ResolveOptions) {
 		});
 		const records = await getRecords(ensClient, {
 			name: name as string,
-			coins: ["ETH", "BTC", "LTC", "DOGE", "SOL"],
+			coins: [
+				"ETH",
+				"BTC",
+				"LTC",
+				"DOGE",
+				"SOL",
+				"OP",
+				"BASE",
+				"SCR",
+				"MATIC",
+				"LINEA",
+			],
 			texts: [
 				...(subgraphRecords?.texts || []),
 				// ENSIP-5 Global Keys
