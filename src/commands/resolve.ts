@@ -1,29 +1,21 @@
 import { getContentHashRecord, getRecords } from "@ensdomains/ensjs/public";
-import { type Address, isHex } from "viem";
 import { normalize } from "viem/ens";
-import type { ResolveOptions } from "../utils/types";
-import { ensClient } from "../utils/viem";
-import { spinner } from "../utils/spinner";
+import {
+	ensClient,
+	getNameAndAddress,
+	type ResolveOptions,
+	spinner,
+} from "../utils";
 
 export async function resolve(options: ResolveOptions) {
-	let name: string | null;
-	let address: Address | null;
-	let input: "address" | "name";
 	spinner.start();
 
-	// Handle name or address
-	if (isHex(options.input)) {
-		address = options.input;
-		input = "address";
-		name = await ensClient.getEnsName({
-			address: input as Address,
-		});
-	} else {
-		name = options.input;
-		input = "name";
-		address = await ensClient.getEnsAddress({
-			name: normalize(options.input as string),
-		});
+	const { name, address, input } = await getNameAndAddress(options);
+
+	if (!name || !address) {
+		spinner.stop();
+		console.log("404: Name not found");
+		return;
 	}
 
 	// Handle TXT

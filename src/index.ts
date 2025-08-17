@@ -10,7 +10,14 @@ import {
 	string,
 	subcommands,
 } from "cmd-ts";
-import { profile as profileCmd, resolve as resolveCmd } from "./commands";
+import {
+	getDeployments,
+	getLabelHash,
+	getNamehash,
+	getResolver,
+	profile as profileCmd,
+	resolve as resolveCmd,
+} from "./commands";
 
 const resolve = command({
 	name: "resolve",
@@ -49,7 +56,7 @@ const resolve = command({
 });
 
 const profile = command({
-	name: "resolve",
+	name: "profile",
 	description: "Resolve an ENS name to an address or vice versa",
 	args: {
 		input: positional({
@@ -60,11 +67,74 @@ const profile = command({
 	handler: async (args) => {
 		if (!args.input) {
 			console.log(
-				"Please provide an address or ENS Name `atlas resolve <ADDRESS | vitalik.eth>`",
+				"Please provide an address or ENS Name `atlas profile <ADDRESS | vitalik.eth>`",
 			);
 			return;
 		}
 		await profileCmd(args);
+	},
+});
+
+const namehash = command({
+	name: "namehash",
+	description: "Get a namehash for an ENS name",
+	args: {
+		name: positional({
+			type: string,
+			description: "ENS name for the namehash",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name) {
+			console.log("Please provide an ENS Name `atlas namehash <vitalik.eth>`");
+			return;
+		}
+		await getNamehash(args);
+	},
+});
+
+const labelhash = command({
+	name: "labelhash",
+	description: "Get a labelhash for an ENS name",
+	args: {
+		name: positional({
+			type: string,
+			description: "ENS for the labelhash",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name) {
+			console.log("Please provide an ENS Name `atlas labelhash <vitalik.eth>`");
+			return;
+		}
+		await getLabelHash(args);
+	},
+});
+
+const resolver = command({
+	name: "resolver",
+	description: "Get the current resolver for an ENS Name",
+	args: {
+		name: positional({
+			type: string,
+			description: "Target ENS name for the resolver query",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name) {
+			console.log("Please provide an ENS Name `atlas resolver <vitalik.eth>`");
+			return;
+		}
+		await getResolver(args);
+	},
+});
+
+const deployments = command({
+	name: "deployments",
+	description: "Print a list of currently deployed ENS contracts",
+	args: {},
+	handler: () => {
+		getDeployments();
 	},
 });
 
@@ -75,6 +145,10 @@ const cli = subcommands({
 	cmds: {
 		profile,
 		resolve,
+		namehash,
+		labelhash,
+		resolver,
+		deployments,
 	},
 });
 

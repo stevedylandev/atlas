@@ -7,7 +7,9 @@
 	},
 	"scripts": {
 		"build": "bun build src/index.ts --outdir dist --target node",
-		"dev": "bun run build && bun link"
+		"dev": "bun run build && bun link",
+		"lint": "bunx @biome-js/biome lint --write src",
+		"format": "bunx @biome-js/biome format --write src"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"

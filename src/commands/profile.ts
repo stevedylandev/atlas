@@ -1,11 +1,13 @@
 import { getRecords } from "@ensdomains/ensjs/public";
 import { getSubgraphRecords } from "@ensdomains/ensjs/subgraph";
-import { type Address, isHex } from "viem";
-import { normalize } from "viem/ens";
+import type { Address } from "viem";
 import colors from "yoctocolors";
-import { spinner } from "../utils/spinner";
-import type { ResolveOptions } from "../utils/types";
-import { ensClient } from "../utils/viem";
+import {
+	ensClient,
+	getNameAndAddress,
+	type ResolveOptions,
+	spinner,
+} from "../utils";
 
 function printProfile(
 	name: string | null,
@@ -102,25 +104,14 @@ function formatTextKey(key: string): string {
 }
 
 export async function profile(options: ResolveOptions) {
-	let name: string | null;
-	let address: Address | null;
-	let input: "address" | "name";
-
 	spinner.start();
 
-	// Handle name or address
-	if (isHex(options.input)) {
-		address = options.input;
-		input = "address";
-		name = await ensClient.getEnsName({
-			address: input as Address,
-		});
-	} else {
-		name = options.input;
-		input = "name";
-		address = await ensClient.getEnsAddress({
-			name: normalize(options.input as string),
-		});
+	const { name, address } = await getNameAndAddress(options);
+
+	if (!name || !address) {
+		spinner.stop();
+		console.log("404: Name not found");
+		return;
 	}
 
 	try {
