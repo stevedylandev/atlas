@@ -9,7 +9,7 @@ A CLI for exploring ENS
 Install using your package manager of choice
 
 ```bash
-npm i -g @stevedylandev/atlas
+npm i -g @stevedylandev/atlas@latest
 ```
 
 Make sure it worked by running `atlas`
@@ -104,7 +104,7 @@ atlas somenewthing
 > [!NOTE]
 > If you don't see any changes, make sure you uninstall any previously installed versions. If you use Bun it should overwrite but you can always manually fix it:
 > ```bash
-> which atlas | rm xargs
+> which atlas | xargs rm
 > ```
 
 ## Feedback
