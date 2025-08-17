@@ -140,7 +140,25 @@ const deployments = command({
 
 const cli = subcommands({
 	name: "atlas",
-	description: "Explore ENS with Atlas",
+	description: `
+
+        ++   ++
+     +++  +++  +++             ##       ##########    ##              ##         #####
+   +++++ +++++  ++++          ####          ##        ##             ###       ##     ##
+  +++++ +++++++ +++++         ## ##         ##        ##            ## ##      ##
+  +++++ +++++++ +++++        ##  ##         ##        ##            ##  ##     #####
+  +++++ +++++++ +++++        #    ##        ##        ##           ##   ##          ####
+  +++++ +++++++ +++++       #########       ##        ##          #########            ##
+   +++++ +++++  ++++       ##      ##       ##        ##          ##      ##   ##     ##
+     +++  +++  +++         ##       ##      ##        #########  ##       ##     ######
+         ++  +
+
+
+
+         A CLI for exploring ENS
+         https://github.com/stevedylandev/atlas
+
+	`,
 	version: "0.0.1",
 	cmds: {
 		profile,
