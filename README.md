@@ -1,15 +1,13 @@
 # atlas
 
-To install dependencies:
+![cover](./cover.png)
 
-```bash
-bun install
-```
+A CLI for exploring ENS
 
-To run:
+## Installation
 
-```bash
-bun run index.ts
-```
+## Usage
 
-This project was created using `bun init` in bun v1.2.20. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+## Development
+
+## Feedback
