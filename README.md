@@ -103,9 +103,9 @@ atlas somenewthing
 
 > [!NOTE]
 > If you don't see any changes, make sure you uninstall any previously installed versions. If you use Bun it should overwrite but you can always manually fix it:
-```bash
-which atlas | rm xargs
-```
+> ```bash
+> which atlas | rm xargs
+> ```
 
 ## Feedback
 
