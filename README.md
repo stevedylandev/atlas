@@ -9,7 +9,7 @@ A CLI for exploring ENS
 Install using your package manager of choice
 
 ```bash
-npm i -g @stevedylandev/atlas@latest
+npm i -g @stevedylandev/atlas
 ```
 
 Make sure it worked by running `atlas`
