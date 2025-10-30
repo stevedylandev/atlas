@@ -138,6 +138,46 @@ const deployments = command({
 	},
 });
 
+const editTxt = command({
+	name: "txt",
+	description: "Set TXT record for an ENS name",
+	args: {
+		name: positional({
+			type: string,
+			description: "Target ENS name",
+		}),
+		record: positional({
+			type: string,
+			description: "The type of TXT you want to update, e.g. .com.discord",
+		}),
+		value: positional({
+			type: string,
+			description: "Value of the TXT record being set, e.g. @myusername",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name) {
+			console.log("Please provide an ENS Name `atlas resolver <vitalik.eth>`");
+			return;
+		}
+		await getResolver(args);
+	},
+});
+
+const setAddress = command({});
+
+const setResolver = command({});
+
+const setPrimaryName = command({});
+
+const setAbi = command({});
+
+const set = subcommands({
+	name: "edit",
+	description: "Edit records an ENS name",
+	cmds: { editTxt },
+});
+
 const cli = subcommands({
 	name: "atlas",
 	description: `
