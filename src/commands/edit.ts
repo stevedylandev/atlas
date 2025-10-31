@@ -105,7 +105,7 @@ export async function setAddress(options: {
 		const hash = await setAddressRecord(wallet, {
 			name: options.name,
 			coin: options.coin,
-			value: options.value,
+			value: options.value === "null" ? null : options.value,
 			resolverAddress: resolverAddress as `0x${string}`,
 		});
 
