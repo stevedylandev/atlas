@@ -5,4 +5,5 @@ export type ResolveOptions = {
 	chain?: string;
 	contenthash?: boolean;
 	txt?: string;
+	resolverAddress?: string;
 };

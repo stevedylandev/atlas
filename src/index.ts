@@ -17,6 +17,11 @@ import {
 	getResolver,
 	profile as profileCmd,
 	resolve as resolveCmd,
+	setTxt as setTxtCmd,
+	setAddress as setAddressCmd,
+	setResolver as setResolverCmd,
+	setPrimaryName as setPrimaryNameCmd,
+	setAbi as setAbiCmd,
 } from "./commands";
 
 const resolve = command({
@@ -43,6 +48,12 @@ const resolve = command({
 			long: "chain",
 			description: "Get address for a specific chain",
 		}),
+		resolverAddress: option({
+			type: optional(string),
+			long: "resolver",
+			short: "r",
+			description: "Specify a custom resolver address",
+		}),
 	},
 	handler: async (args) => {
 		if (!args.input) {
@@ -62,6 +73,12 @@ const profile = command({
 		input: positional({
 			type: string,
 			description: "Provide either an address or an ENS name to resolve it",
+		}),
+		resolverAddress: option({
+			type: optional(string),
+			long: "resolver",
+			short: "r",
+			description: "Specify a custom resolver address",
 		}),
 	},
 	handler: async (args) => {
@@ -138,6 +155,189 @@ const deployments = command({
 	},
 });
 
+const editTxt = command({
+	name: "txt",
+	description:
+		"Set TXT record for an ENS name (use 'null' to clear the record)",
+	args: {
+		name: positional({
+			type: string,
+			description: "Target ENS name",
+		}),
+		record: positional({
+			type: string,
+			description: "The type of TXT you want to update, e.g. com.discord",
+		}),
+		value: positional({
+			type: string,
+			description:
+				"Value of the TXT record being set (use 'null' to clear), e.g. myusername",
+		}),
+		resolverAddress: option({
+			type: optional(string),
+			long: "resolver",
+			short: "r",
+			description:
+				"Resolver address (optional, will auto-detect if not provided)",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name || !args.record || args.value === undefined) {
+			console.log(
+				"Please provide all required arguments: `atlas edit txt <name> <record> <value>`",
+			);
+			return;
+		}
+		await setTxtCmd({
+			...args,
+			value: args.value === "null" ? "" : args.value,
+		});
+	},
+});
+
+const editAddress = command({
+	name: "address",
+	description: "Set address record for a specific coin/chain",
+	args: {
+		name: positional({
+			type: string,
+			description: "Target ENS name",
+		}),
+		coin: positional({
+			type: string,
+			description: "Coin/chain identifier (e.g. ETH, BTC, SOL)",
+		}),
+		value: positional({
+			type: string,
+			description: "Address value to set",
+		}),
+		resolverAddress: option({
+			type: optional(string),
+			long: "resolver",
+			short: "r",
+			description:
+				"Resolver address (optional, will auto-detect if not provided)",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name || !args.coin || !args.value) {
+			console.log(
+				"Please provide all required arguments: `atlas edit address <name> <coin> <value>`",
+			);
+			return;
+		}
+		await setAddressCmd(args);
+	},
+});
+
+const editResolver = command({
+	name: "resolver",
+	description: "Set the resolver for an ENS name",
+	args: {
+		name: positional({
+			type: string,
+			description: "Target ENS name",
+		}),
+		resolverAddress: positional({
+			type: string,
+			description: "New resolver address",
+		}),
+		contract: option({
+			type: optional(string),
+			long: "contract",
+			short: "c",
+			description:
+				"Contract to use: registry or nameWrapper (default: registry)",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name || !args.resolverAddress) {
+			console.log(
+				"Please provide all required arguments: `atlas edit resolver <name> <resolverAddress>`",
+			);
+			return;
+		}
+		await setResolverCmd({
+			...args,
+			contract: (args.contract as "registry" | "nameWrapper") || "registry",
+		});
+	},
+});
+
+const editPrimaryName = command({
+	name: "primary",
+	description: "Set the primary ENS name for your address",
+	args: {
+		name: positional({
+			type: string,
+			description: "ENS name to set as primary",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name) {
+			console.log(
+				"Please provide an ENS name: `atlas edit primary <vitalik.eth>`",
+			);
+			return;
+		}
+		await setPrimaryNameCmd(args);
+	},
+});
+
+const editAbi = command({
+	name: "abi",
+	description:
+		"Set ABI record for an ENS name (use 'null' to clear the record)",
+	args: {
+		name: positional({
+			type: string,
+			description: "Target ENS name",
+		}),
+		abiPath: positional({
+			type: string,
+			description: "Path to ABI JSON file (use 'null' to clear)",
+		}),
+		encodeAs: option({
+			type: optional(string),
+			long: "encode",
+			short: "e",
+			description: "Encoding format: json, zlib, cbor, or uri (default: json)",
+		}),
+		resolverAddress: option({
+			type: optional(string),
+			long: "resolver",
+			short: "r",
+			description:
+				"Resolver address (optional, will auto-detect if not provided)",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name || args.abiPath === undefined) {
+			console.log(
+				"Please provide all required arguments: `atlas edit abi <name> <abiPath>`",
+			);
+			return;
+		}
+		await setAbiCmd({
+			...args,
+			abiPath: args.abiPath,
+			encodeAs: (args.encodeAs as "json" | "zlib" | "cbor" | "uri") || "json",
+		});
+	},
+});
+
+const edit = subcommands({
+	name: "edit",
+	description: "Edit records for an ENS name",
+	cmds: {
+		txt: editTxt,
+		address: editAddress,
+		resolver: editResolver,
+		primaryName: editPrimaryName,
+		abi: editAbi,
+	},
+});
+
 const cli = subcommands({
 	name: "atlas",
 	description: `
@@ -167,6 +367,7 @@ const cli = subcommands({
 		labelhash,
 		resolver,
 		deployments,
+		edit,
 	},
 });
 

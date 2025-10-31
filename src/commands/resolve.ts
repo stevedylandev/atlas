@@ -18,6 +18,16 @@ export async function resolve(options: ResolveOptions) {
 		return;
 	}
 
+	// Note: If resolverAddress is provided, inform user it's for reference
+	if (options.resolverAddress) {
+		spinner.stop();
+		console.log(`Note: Using custom resolver: ${options.resolverAddress}`);
+		console.log(
+			"(Custom resolver support for read operations is limited in current ENS.js version)\n",
+		);
+		spinner.start();
+	}
+
 	// Handle TXT
 	if (options.txt) {
 		try {
@@ -31,6 +41,9 @@ export async function resolve(options: ResolveOptions) {
 			const e = error as { shortMessage: string };
 			spinner.stop();
 			console.error("Error fetching TXT record:", e.shortMessage);
+			console.error(
+				"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+			);
 		}
 		return;
 	}
@@ -47,6 +60,9 @@ export async function resolve(options: ResolveOptions) {
 			const e = error as { shortMessage: string };
 			spinner.stop();
 			console.error("Error fetching content hash:", e.shortMessage);
+			console.error(
+				"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+			);
 		}
 		return;
 	}
@@ -63,6 +79,9 @@ export async function resolve(options: ResolveOptions) {
 			const e = error as { shortMessage: string };
 			spinner.stop();
 			console.error("Error fetching chain record:", e.shortMessage);
+			console.error(
+				"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+			);
 		}
 		spinner.stop();
 		return;

@@ -129,6 +129,92 @@ atlas deployments
 #   ....
 ```
 
+## Edit Commands
+
+Edit commands require setting the `ATLAS_PRIVATE_KEY` environment variable with your wallet's private key to sign transactions. A great way to do this is to use the Foundry `cast` utility within a shell session.
+
+```bash
+# By running the command below you export the env variable into your shell session
+
+export ATLAS_PRIVATE_KEY=$(cast wallet private-key --account someaccount)
+```
+
+> [!WARNING]
+> I would **not** recommend making this environment variable permanent in your shell configurtation files! Use it during the session then close the session to keep the key encrypted locally
+
+### `edit txt`
+Set or clear a text record for an ENS name
+
+```bash
+# Set a text record
+atlas edit txt myname.eth com.github myusername
+
+# Set a Discord username
+atlas edit txt myname.eth com.discord mydiscord#1234
+
+# Clear a text record by passing 'null'
+atlas edit txt myname.eth com.github null
+
+# Specify a custom resolver address
+atlas edit txt myname.eth com.twitter myhandle --resolver 0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63
+```
+
+### `edit address`
+Set or clear an address record for a specific coin/chain
+
+```bash
+# Set an ETH address
+atlas edit address myname.eth ETH 0x1234567890123456789012345678901234567890
+
+# Set a Bitcoin address
+atlas edit address myname.eth BTC bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+
+# Set a Solana address
+atlas edit address myname.eth SOL 7EcDhSYGxXyscszYEp35KHN8vvw3svAuLKTzXwCFLtV
+
+# Clear an address record by passing 'null'
+atlas edit address myname.eth BTC null
+
+# Specify a custom resolver address
+atlas edit address myname.eth ETH 0x1234... --resolver 0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63
+```
+
+### `edit resolver`
+Set the resolver for an ENS name
+
+```bash
+# Set resolver using registry contract (default)
+atlas edit resolver myname.eth 0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63
+
+# Set resolver using nameWrapper contract
+atlas edit resolver myname.eth 0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63 --contract nameWrapper
+```
+
+### `edit primary`
+Set the primary ENS name for your address (reverse record)
+
+```bash
+# Set primary name
+atlas edit primary myname.eth
+```
+
+### `edit abi`
+Set or clear an ABI record for an ENS name
+
+```bash
+# Set ABI from a JSON file
+atlas edit abi myname.eth ./contract-abi.json
+
+# Set ABI with specific encoding
+atlas edit abi myname.eth ./contract-abi.json --encode zlib
+
+# Clear an ABI record by passing 'null'
+atlas edit abi myname.eth null
+
+# Specify a custom resolver address
+atlas edit abi myname.eth ./contract-abi.json --resolver 0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63
+```
+
 ## Development
 
 Make sure [Bun](https://bun.sh) is installed
