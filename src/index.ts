@@ -22,6 +22,7 @@ import {
 	setResolver as setResolverCmd,
 	setPrimaryName as setPrimaryNameCmd,
 	setAbi as setAbiCmd,
+	setContentHash as setContentHashCmd,
 } from "./commands";
 
 const resolve = command({
@@ -326,6 +327,39 @@ const editAbi = command({
 	},
 });
 
+const editContentHash = command({
+	name: "contenthash",
+	description:
+		"Set content hash for an ENS name (use 'null' to clear the record)",
+	args: {
+		name: positional({
+			type: string,
+			description: "Target ENS name",
+		}),
+		contentHash: positional({
+			type: string,
+			description:
+				"Content hash value (e.g. ipfs://, ipns://, or 'null' to clear)",
+		}),
+		resolverAddress: option({
+			type: optional(string),
+			long: "resolver",
+			short: "r",
+			description:
+				"Resolver address (optional, will auto-detect if not provided)",
+		}),
+	},
+	handler: async (args) => {
+		if (!args.name || args.contentHash === undefined) {
+			console.log(
+				"Please provide all required arguments: `atlas edit contenthash <name> <contentHash>`",
+			);
+			return;
+		}
+		await setContentHashCmd(args);
+	},
+});
+
 const edit = subcommands({
 	name: "edit",
 	description: "Edit records for an ENS name",
@@ -335,6 +369,7 @@ const edit = subcommands({
 		resolver: editResolver,
 		primaryName: editPrimaryName,
 		abi: editAbi,
+		contenthash: editContentHash,
 	},
 });
 

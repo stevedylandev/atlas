@@ -4,6 +4,7 @@ import {
 	setResolver as setResolverRecord,
 	setPrimaryName as setPrimaryNameRecord,
 	setAbiRecord,
+	setContentHashRecord,
 } from "@ensdomains/ensjs/wallet";
 import { normalize } from "viem/ens";
 import { spinner, walletClient } from "../utils";
@@ -264,6 +265,62 @@ export async function setAbi(options: {
 		const e = error as { shortMessage?: string; message: string };
 		spinner.stop();
 		console.error("Error setting ABI record:", e.shortMessage || e.message);
+		console.error(
+			"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+		);
+	}
+}
+
+export async function setContentHash(options: {
+	name: string;
+	contentHash: string;
+	resolverAddress?: string;
+}) {
+	try {
+		spinner.start();
+		const wallet = await walletClient();
+
+		if (!wallet) {
+			spinner.stop();
+			console.error(
+				"Error: Wallet not configured. Please set ATLAS_PRIVATE_KEY environment variable.",
+			);
+			return;
+		}
+
+		// Get resolver if not provided
+		let resolverAddress = options.resolverAddress;
+		if (!resolverAddress) {
+			const { ensClient } = await import("../utils");
+			const resolver = await ensClient.getEnsResolver({
+				name: normalize(options.name),
+			});
+			resolverAddress = resolver || undefined;
+		}
+
+		if (!resolverAddress) {
+			spinner.stop();
+			console.error("Error: No resolver found for this name");
+			return;
+		}
+
+		const hash = await setContentHashRecord(wallet, {
+			name: options.name,
+			contentHash: options.contentHash === "null" ? null : options.contentHash,
+			resolverAddress: resolverAddress as `0x${string}`,
+		});
+
+		spinner.stop();
+		if (options.contentHash === "null") {
+			console.log(`✓ Content hash cleared successfully`);
+		} else {
+			console.log(`✓ Content hash set successfully`);
+		}
+		console.log(`Transaction hash: ${hash}`);
+	} catch (error) {
+		const e = error as { shortMessage?: string; message: string };
+		spinner.stop();
+		console.error("Error setting content hash:", e.shortMessage || e.message);
 		console.error(
 			"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
 		);
