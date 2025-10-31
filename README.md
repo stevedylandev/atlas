@@ -215,6 +215,23 @@ atlas edit abi myname.eth null
 atlas edit abi myname.eth ./contract-abi.json --resolver 0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63
 ```
 
+### `edit contenthash`
+Set or clear a content hash for an ENS name
+
+```bash
+# Set an IPFS content hash
+atlas edit contenthash myname.eth ipfs://QmRAQB6YaCyidP37UdDnjFY5vQuiBrcqdyoW1CuDgwxkD4
+
+# Set an IPNS content hash
+atlas edit contenthash myname.eth ipns://k51qzi5uqu5djdczd6zw0grmo23j2vkj9uzvujencg15s5rlkq0ss4ivll8wqw
+
+# Clear a content hash by passing 'null'
+atlas edit contenthash myname.eth null
+
+# Specify a custom resolver address
+atlas edit contenthash myname.eth ipfs://QmHash --resolver 0x231b0Ee14048e9dCcD1d247744d114a4EB5E8E63
+```
+
 ## Development
 
 Make sure [Bun](https://bun.sh) is installed
