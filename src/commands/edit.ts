@@ -110,7 +110,11 @@ export async function setAddress(options: {
 		});
 
 		spinner.stop();
-		console.log(`✓ Address record set successfully`);
+		if (options.value === "null") {
+			console.log(`✓ Address record cleared successfully`);
+		} else {
+			console.log(`✓ Address record set successfully`);
+		}
 		console.log(`Transaction hash: ${hash}`);
 	} catch (error) {
 		const e = error as { shortMessage?: string; message: string };
