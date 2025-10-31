@@ -157,7 +157,8 @@ const deployments = command({
 
 const editTxt = command({
 	name: "txt",
-	description: "Set TXT record for an ENS name",
+	description:
+		"Set TXT record for an ENS name (use 'null' to clear the record)",
 	args: {
 		name: positional({
 			type: string,
@@ -169,7 +170,8 @@ const editTxt = command({
 		}),
 		value: positional({
 			type: string,
-			description: "Value of the TXT record being set, e.g. myusername",
+			description:
+				"Value of the TXT record being set (use 'null' to clear), e.g. myusername",
 		}),
 		resolverAddress: option({
 			type: optional(string),
@@ -180,13 +182,16 @@ const editTxt = command({
 		}),
 	},
 	handler: async (args) => {
-		if (!args.name || !args.record || !args.value) {
+		if (!args.name || !args.record || args.value === undefined) {
 			console.log(
 				"Please provide all required arguments: `atlas edit txt <name> <record> <value>`",
 			);
 			return;
 		}
-		await setTxtCmd(args);
+		await setTxtCmd({
+			...args,
+			value: args.value === "null" ? "" : args.value,
+		});
 	},
 });
 
@@ -281,7 +286,8 @@ const editPrimaryName = command({
 
 const editAbi = command({
 	name: "abi",
-	description: "Set ABI record for an ENS name",
+	description:
+		"Set ABI record for an ENS name (use 'null' to clear the record)",
 	args: {
 		name: positional({
 			type: string,
@@ -289,7 +295,7 @@ const editAbi = command({
 		}),
 		abiPath: positional({
 			type: string,
-			description: "Path to ABI JSON file",
+			description: "Path to ABI JSON file (use 'null' to clear)",
 		}),
 		encodeAs: option({
 			type: optional(string),
@@ -306,7 +312,7 @@ const editAbi = command({
 		}),
 	},
 	handler: async (args) => {
-		if (!args.name || !args.abiPath) {
+		if (!args.name || args.abiPath === undefined) {
 			console.log(
 				"Please provide all required arguments: `atlas edit abi <name> <abiPath>`",
 			);
@@ -314,6 +320,7 @@ const editAbi = command({
 		}
 		await setAbiCmd({
 			...args,
+			abiPath: args.abiPath,
 			encodeAs: (args.encodeAs as "json" | "zlib" | "cbor" | "uri") || "json",
 		});
 	},

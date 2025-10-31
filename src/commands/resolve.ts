@@ -41,6 +41,9 @@ export async function resolve(options: ResolveOptions) {
 			const e = error as { shortMessage: string };
 			spinner.stop();
 			console.error("Error fetching TXT record:", e.shortMessage);
+			console.error(
+				"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+			);
 		}
 		return;
 	}
@@ -57,6 +60,9 @@ export async function resolve(options: ResolveOptions) {
 			const e = error as { shortMessage: string };
 			spinner.stop();
 			console.error("Error fetching content hash:", e.shortMessage);
+			console.error(
+				"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+			);
 		}
 		return;
 	}
@@ -73,6 +79,9 @@ export async function resolve(options: ResolveOptions) {
 			const e = error as { shortMessage: string };
 			spinner.stop();
 			console.error("Error fetching chain record:", e.shortMessage);
+			console.error(
+				"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+			);
 		}
 		spinner.stop();
 		return;

@@ -52,12 +52,19 @@ export async function setTxt(options: {
 		});
 
 		spinner.stop();
-		console.log(`✓ TXT record set successfully`);
+		if (options.value === "") {
+			console.log(`✓ TXT record cleared successfully`);
+		} else {
+			console.log(`✓ TXT record set successfully`);
+		}
 		console.log(`Transaction hash: ${hash}`);
 	} catch (error) {
 		const e = error as { shortMessage?: string; message: string };
 		spinner.stop();
 		console.error("Error setting TXT record:", e.shortMessage || e.message);
+		console.error(
+			"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+		);
 	}
 }
 
@@ -109,6 +116,9 @@ export async function setAddress(options: {
 		const e = error as { shortMessage?: string; message: string };
 		spinner.stop();
 		console.error("Error setting address record:", e.shortMessage || e.message);
+		console.error(
+			"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+		);
 	}
 }
 
@@ -142,6 +152,9 @@ export async function setResolver(options: {
 		const e = error as { shortMessage?: string; message: string };
 		spinner.stop();
 		console.error("Error setting resolver:", e.shortMessage || e.message);
+		console.error(
+			"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+		);
 	}
 }
 
@@ -169,6 +182,9 @@ export async function setPrimaryName(options: { name: string }) {
 		const e = error as { shortMessage?: string; message: string };
 		spinner.stop();
 		console.error("Error setting primary name:", e.shortMessage || e.message);
+		console.error(
+			"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+		);
 	}
 }
 
@@ -190,15 +206,26 @@ export async function setAbi(options: {
 			return;
 		}
 
-		// Read ABI file
-		const abiContent = await readFile(options.abiPath, "utf-8");
-		const abi = JSON.parse(abiContent);
+		let encodedAbi: `0x${string}`;
 
-		// Encode ABI
-		const encodedAbi = await encodeAbi({
-			encodeAs: options.encodeAs || "json",
-			data: abi,
-		});
+		// Handle null case to clear ABI
+		if (options.abiPath === "null") {
+			// Encode empty ABI to clear the record
+			encodedAbi = await encodeAbi({
+				encodeAs: options.encodeAs || "json",
+				data: null,
+			});
+		} else {
+			// Read ABI file
+			const abiContent = await readFile(options.abiPath, "utf-8");
+			const abi = JSON.parse(abiContent);
+
+			// Encode ABI
+			encodedAbi = await encodeAbi({
+				encodeAs: options.encodeAs || "json",
+				data: abi,
+			});
+		}
 
 		// Get resolver if not provided
 		let resolverAddress = options.resolverAddress;
@@ -223,11 +250,18 @@ export async function setAbi(options: {
 		});
 
 		spinner.stop();
-		console.log(`✓ ABI record set successfully`);
+		if (options.abiPath === "null") {
+			console.log(`✓ ABI record cleared successfully`);
+		} else {
+			console.log(`✓ ABI record set successfully`);
+		}
 		console.log(`Transaction hash: ${hash}`);
 	} catch (error) {
 		const e = error as { shortMessage?: string; message: string };
 		spinner.stop();
 		console.error("Error setting ABI record:", e.shortMessage || e.message);
+		console.error(
+			"If you are receiving HTTP errors consider setting ETH_RPC_URL as an environemnt variable",
+		);
 	}
 }
