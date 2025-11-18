@@ -394,7 +394,7 @@ const cli = subcommands({
          https://github.com/stevedylandev/atlas
 
 	`,
-	version: "0.2.1",
+	version: "0.2.2",
 	cmds: {
 		profile,
 		resolve,
