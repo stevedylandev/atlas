@@ -50,6 +50,8 @@ atlas resolve vitalik.eth --chain ETH
 ### `profile`
 Display a complete ENS profile with all records
 
+Uses [ENSNode](https://ensnode.io) for fetching indexed data
+
 ```bash
 # Show full profile for an ENS name or address
 atlas profile vitalik.eth
