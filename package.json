@@ -1,32 +1,32 @@
 {
-	"name": "@stevedylandev/atlas",
-	"version": "0.2.2",
-	"module": "index.ts",
-	"type": "module",
-	"bin": {
-		"atlas": "./dist/index.js"
-	},
-	"files": [
-		"dist"
-	],
-	"scripts": {
-		"build": "bun build src/index.ts --outdir dist --target node",
-		"dev": "bun run build && bun link",
-		"lint": "bunx @biome-js/biome lint --write src",
-		"format": "bunx @biome-js/biome format --write src"
-	},
-	"devDependencies": {
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5"
-	},
-	"dependencies": {
-		"@ensdomains/content-hash": "^3.0.0",
-		"@ensdomains/ensjs": "^4.0.2",
-		"cmd-ts": "^0.13.0",
-		"viem": "^2.33.3",
-		"yocto-spinner": "^1.0.0",
-		"yoctocolors": "^2.1.1"
-	}
+  "name": "@stevedylandev/atlas",
+  "version": "0.2.2",
+  "module": "index.ts",
+  "type": "module",
+  "bin": {
+    "atlas": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target node",
+    "dev": "bun run build && bun link",
+    "lint": "bunx @biome-js/biome lint --write src",
+    "format": "bunx @biome-js/biome format --write src"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@ensdomains/content-hash": "^3.0.0",
+    "@ensdomains/ensjs": "^4.0.2",
+    "cmd-ts": "^0.13.0",
+    "viem": "^2.48.11",
+    "yocto-spinner": "^1.0.0",
+    "yoctocolors": "^2.1.1"
+  }
 }
