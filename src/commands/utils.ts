@@ -1,7 +1,7 @@
 import { labelhash, namehash } from "viem";
 import { ensClient, spinner } from "../utils";
 import { normalize } from "viem/ens";
-import { addresses } from "@ensdomains/ensjs/contracts";
+import { ensL1Contracts } from "@ensdomains/ensjs/chain";
 
 export async function getLabelHash(options: { name: string }) {
 	spinner.start();
@@ -27,7 +27,7 @@ export async function getResolver({ name }: { name: string }) {
 }
 
 export function getDeployments() {
-	for (const [chainId, contracts] of Object.entries(addresses)) {
+	for (const [chainId, contracts] of Object.entries(ensL1Contracts)) {
 		console.log(`Chain ID: ${chainId}`);
 		for (const [contractName, contractData] of Object.entries(contracts)) {
 			console.log(`  ${contractName}: ${contractData.address}`);

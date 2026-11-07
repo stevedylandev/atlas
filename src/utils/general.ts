@@ -2,7 +2,10 @@ import { isHex, type Address } from "viem";
 import { normalize } from "viem/ens";
 import { ensClient, type ResolveOptions } from "./";
 
-export async function getNameAndAddress(options: ResolveOptions) {
+export async function getNameAndAddress(
+	options: ResolveOptions,
+	requireAddress = true,
+) {
 	let name: string | null = null;
 	let address: Address | null = null;
 	let input: "address" | "name";
@@ -18,9 +21,15 @@ export async function getNameAndAddress(options: ResolveOptions) {
 		} else {
 			name = options.input;
 			input = "name";
-			address = await ensClient.getEnsAddress({
-				name: normalize(options.input as string),
-			});
+			if (!options.contenthash) {
+				try {
+					address = await ensClient.getEnsAddress({
+						name: normalize(options.input as string),
+					});
+				} catch (error) {
+					if (requireAddress) throw error;
+				}
+			}
 		}
 
 		return { name, address, input };

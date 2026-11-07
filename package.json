@@ -23,8 +23,9 @@
 	},
 	"dependencies": {
 		"@ensdomains/content-hash": "^3.0.0",
-		"@ensdomains/ensjs": "^4.2.2",
+		"@ensdomains/ensjs": "https://pkg.pr.new/ensdomains/ensjs/@ensdomains/ensjs@495ffc731a5f37b2e2c5504ac8959e75dae1da10",
 		"cmd-ts": "^0.13.0",
+		"graphql": "^16.14.2",
 		"ts-pattern": "^5.9.0",
 		"viem": "^2.50.4",
 		"yocto-spinner": "^1.0.0",
