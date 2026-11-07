@@ -12,7 +12,7 @@ export async function resolve(options: ResolveOptions) {
 
 	const { name, address, input } = await getNameAndAddress(options);
 
-	if (!name || !address) {
+	if (!name || (!address && !options.contenthash)) {
 		spinner.stop();
 		console.log("404: Name not found");
 		return;
@@ -55,7 +55,14 @@ export async function resolve(options: ResolveOptions) {
 				name: name as string,
 			});
 			spinner.stop();
-			console.log(contentHash?.decoded || "Not found");
+			if (
+				contentHash?.protocolType === "adnl" ||
+				contentHash?.protocolType === "tonstorage"
+			) {
+				console.log(`${contentHash.protocolType}://${contentHash.decoded}`);
+			} else {
+				console.log(contentHash?.decoded || "Not found");
+			}
 		} catch (error) {
 			const e = error as { shortMessage: string };
 			spinner.stop();

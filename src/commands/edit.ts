@@ -1,11 +1,13 @@
 import {
 	setTextRecord,
 	setAddressRecord,
-	setResolver as setResolverRecord,
-	setPrimaryName as setPrimaryNameRecord,
 	setAbiRecord,
 	setContentHashRecord,
 } from "@ensdomains/ensjs/wallet";
+import {
+	setResolver as setResolverRecord,
+	setPrimaryName as setPrimaryNameRecord,
+} from "@ensdomains/ensjs/wallet/v1";
 import { normalize } from "viem/ens";
 import { spinner, walletClient } from "../utils";
 import { encodeAbi } from "@ensdomains/ensjs/utils";
@@ -278,6 +280,12 @@ export async function setContentHash(options: {
 }) {
 	try {
 		spinner.start();
+		if (
+			/^(adnl|tonstorage):\/\//.test(options.contentHash) &&
+			!/^(adnl|tonstorage):\/\/[0-9a-f]{64}$/i.test(options.contentHash)
+		) {
+			throw new Error("TON contenthash must contain a 64-character hexadecimal identifier");
+		}
 		const wallet = await walletClient();
 
 		if (!wallet) {

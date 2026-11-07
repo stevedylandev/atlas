@@ -43,12 +43,12 @@ function printProfile(
 		const maxCoinNameLength = Math.max(
 			...records.coins
 				.filter((coin: any) => coin.value)
-				.map((coin: any) => coin.name.toUpperCase().length),
+				.map((coin: any) => coin.symbol.toUpperCase().length),
 		);
 
 		for (const coin of records.coins) {
 			if (coin.value) {
-				const coinName = coin.name.toUpperCase();
+				const coinName = coin.symbol.toUpperCase();
 				const padding = " ".repeat(
 					Math.max(1, maxCoinNameLength + 1 - coinName.length),
 				);
@@ -117,9 +117,9 @@ function formatTextKey(key: string): string {
 export async function profile(options: ResolveOptions) {
 	spinner.start();
 
-	const { name, address } = await getNameAndAddress(options);
+	const { name, address } = await getNameAndAddress(options, false);
 
-	if (!name || !address) {
+	if (!name) {
 		spinner.stop();
 		console.log("404: Name not found");
 		return;
